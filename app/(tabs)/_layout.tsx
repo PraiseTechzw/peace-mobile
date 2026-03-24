@@ -1,33 +1,66 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { theme } from '@/theme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.textMuted,
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: {
+          height: theme.sizing.tabBarHeight,
+          paddingTop: 8,
+          paddingBottom: 8,
+          borderTopColor: theme.colors.border,
+          backgroundColor: theme.colors.surface,
+        },
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialIcons size={theme.sizing.iconLg} name="home-filled" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="resources"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Resources',
+          tabBarIcon: ({ color }) => <MaterialIcons size={theme.sizing.iconLg} name="menu-book" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: 'Chat',
+          tabBarIcon: ({ color }) => <MaterialIcons size={theme.sizing.iconLg} name="chat-bubble" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="wellness"
+        options={{
+          title: 'Wellness',
+          tabBarIcon: ({ color }) => <MaterialIcons size={theme.sizing.iconLg} name="monitor-heart" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="peers"
+        options={{
+          title: 'Peers',
+          tabBarIcon: ({ color }) => <MaterialIcons size={theme.sizing.iconLg} name="groups" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <MaterialIcons size={theme.sizing.iconLg} name="person" color={color} />,
         }}
       />
     </Tabs>

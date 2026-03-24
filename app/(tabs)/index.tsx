@@ -1,98 +1,121 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { Pressable, StyleSheet, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { MoodSelector } from '@/components/cards/mood-selector';
+import { AppHeader } from '@/components/ui/app-header';
+import { Card } from '@/components/ui/card';
+import { Screen } from '@/components/ui/screen';
+import { AppText } from '@/components/ui/app-text';
+import { Button } from '@/components/ui/button';
+import { IconBadge } from '@/components/ui/icon-badge';
+import { useMoodStore } from '@/store/mood-store';
+import { theme } from '@/theme';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const { mood, setMood, updatedAt } = useMoodStore();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  return (
+    <Screen>
+      <AppHeader eyebrow="Welcome back" title="Hey Prais, how are you today?" />
+
+      <Card elevated style={styles.heroCard}>
+        <View style={styles.heroTop}>
+          <View>
+            <AppText variant="caption" color="#D6E8FF">Today&apos;s focus</AppText>
+            <AppText variant="h3" color="#FFFFFF">Small wins matter.</AppText>
+          </View>
+          <MaterialIcons name="auto-awesome" size={theme.sizing.iconLg} color="#CFFAFE" />
+        </View>
+        <AppText variant="body" color="#E9F3FF">
+          Track one mood check-in and connect with one peer educator.
+        </AppText>
+      </Card>
+
+      <Card elevated style={styles.moodCard}>
+        <AppText variant="bodyStrong">Mood check-in</AppText>
+        <MoodSelector value={mood} onChange={setMood} />
+        <AppText variant="caption" color={theme.colors.textSecondary}>
+          {updatedAt
+            ? `Logged as ${mood} just now.`
+            : 'How you feel now shapes your support suggestions.'}
+        </AppText>
+      </Card>
+
+      <View style={styles.quickGrid}>
+        {quickActions.map((action) => (
+          <Pressable key={action.title} style={styles.quickCard} onPress={action.onPress}>
+            <View style={styles.quickTop}>
+              <IconBadge icon={action.icon} tone={action.tone} />
+              <MaterialIcons name="chevron-right" size={theme.sizing.iconMd} color={theme.colors.textMuted} />
+            </View>
+            <AppText variant="bodyStrong">{action.title}</AppText>
+            <AppText variant="caption" color={theme.colors.textSecondary}>{action.description}</AppText>
+          </Pressable>
+        ))}
+      </View>
+
+      <Card style={styles.crisis}>
+        <AppText variant="h3" color="#FFFFFF">Need urgent support?</AppText>
+        <AppText variant="body" color="#FFFFFF">Immediate support options are available right now.</AppText>
+        <Button variant="danger" onPress={() => router.push('/crisis-help')}>Open Crisis Help</Button>
+      </Card>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  heroCard: {
+    backgroundColor: theme.colors.primaryDark,
+    borderColor: '#244D78',
+    gap: theme.spacing.sm,
+  },
+  heroTop: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  moodCard: {
+    backgroundColor: theme.colors.primarySoft,
+    borderColor: '#BFDBFE',
+    gap: theme.spacing.sm,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  quickGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: theme.spacing.md,
+  },
+  quickCard: {
+    width: '48%',
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.radius.lg,
+    padding: theme.spacing.lg,
+    gap: theme.spacing.sm,
+    ...theme.shadows.sm,
+  },
+  quickTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  crisis: {
+    backgroundColor: theme.colors.primaryDark,
+    borderColor: theme.colors.primaryDark,
+    gap: theme.spacing.md,
   },
 });
+
+const quickActions: {
+  title: string;
+  description: string;
+  tone: 'blue' | 'teal' | 'mint' | 'amber' | 'rose' | 'violet';
+  icon: keyof typeof MaterialIcons.glyphMap;
+  onPress: () => void;
+}[] = [
+  { title: 'Resources', description: 'Guides, toolkits, and quick reads', tone: 'blue', icon: 'menu-book', onPress: () => router.push('/(tabs)/resources') },
+  { title: 'Chat', description: 'Talk with trained peer educators', tone: 'teal', icon: 'chat-bubble', onPress: () => router.push('/(tabs)/chat') },
+  { title: 'Wellness', description: 'Track mood and habits weekly', tone: 'mint', icon: 'monitor-heart', onPress: () => router.push('/(tabs)/wellness') },
+  { title: 'Peer Network', description: 'Find support by focus area', tone: 'amber', icon: 'groups', onPress: () => router.push('/(tabs)/peers') },
+];

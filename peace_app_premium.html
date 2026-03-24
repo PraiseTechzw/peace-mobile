@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PEACE App – Premium UI</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Blue system — matches Wellness Tracker */
+  --blue-deep:    #1A3A5C;
+  --blue-mid:     #2563A8;
+  --blue-bright:  #3B82F6;
+  --blue-light:   #BFDBFE;
+  --blue-pale:    #EFF6FF;
+  --blue-glass:   rgba(59,130,246,0.10);
+
+  /* Accent */
+  --teal:         #0EA5C9;
+  --teal-light:   #CFFAFE;
+  --mint:         #10B981;
+  --mint-light:   #D1FAE5;
+  --amber:        #F59E0B;
+  --amber-light:  #FEF3C7;
+  --rose:         #F43F5E;
+  --rose-light:   #FFE4E6;
+  --violet:       #7C3AED;
+  --violet-light: #EDE9FE;
+
+  /* Neutral */
+  --bg:           #F0F4FA;
+  --surface:      #FFFFFF;
+  --surface-2:    #F8FAFF;
+  --border:       #E2EAF4;
+  --text-1:       #0F1F35;
+  --text-2:       #3D5A7A;
+  --text-3:       #7B96B2;
+
+  /* Shadows */
+  --sh-sm:  0 1px 4px rgba(26,58,92,0.07), 0 4px 16px rgba(26,58,92,0.06);
+  --sh-md:  0 4px 24px rgba(26,58,92,0.10), 0 1px 4px rgba(26,58,92,0.06);
+  --sh-lg:  0 12px 48px rgba(26,58,92,0.14), 0 2px 8px rgba(26,58,92,0.06);
+  --sh-btn: 0 4px 14px rgba(37,99,168,0.35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 56px;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  text-align: center;
+}
+.page-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.page-logo-icon {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: var(--sh-btn);
+}
+.page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: var(--blue-deep);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.page-sub {
+  font-size: 0.82rem;
+  color: var(--text-3);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── GRID ── */
+.screens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  gap: 44px 36px;
+  justify-content: center;
+  max-width: 1300px;
+  width: 100%;
+}
+
+/* ── PHONE FRAME ── */
+.phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.phone-frame {
+  width: 300px;
+  background: #0D1B2A;
+  border-radius: 52px;
+  padding: 11px;
+  box-shadow:
+    0 32px 64px rgba(13,27,42,0.32),
+    0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  position: relative;
+}
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  top: 11px; left: 50%;
+  transform: translateX(-50%);
+  width: 80px; height: 26px;
+  background: #0D1B2A;
+  border-radius: 0 0 16px 16px;
+  z-index: 10;
+}
+.phone-inner {
+  border-radius: 42px;
+  overflow: hidden;
+  height: 600px;
+  position: relative;
+  background: var(--surface);
+}
+.screen-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  padding: 5px 14px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: var(--sh-sm);
+}
+.badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--blue-bright);
+}
+
+/* ── STATUS BAR ── */
+.sbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 22px 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: inherit;
+  position: relative;
+  z-index: 5;
+}
+.sbar-right { display: flex; gap: 4px; align-items: center; }
+.sbar.dark { color: white; }
+.sbar.light { color: var(--text-1); }
+
+/* ══════════════════════════════════════
+   SCREEN 1 — SPLASH
+══════════════════════════════════════ */
+.s-splash {
+  height: 100%;
+  background: linear-gradient(170deg, #0F2744 0%, #1A3A5C 45%, #1E4976 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.splash-orb-1 {
+  position: absolute;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.18) 0%, transparent 70%);
+  top: -60px; right: -60px;
+}
+.splash-orb-2 {
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14,165,201,0.14) 0%, transparent 70%);
+  bottom: 40px; left: -40px;
+}
+.splash-ring {
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(59,130,246,0.3);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  margin-bottom: 24px;
+}
+.splash-ring::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 1px solid rgba(59,130,246,0.12);
+}
+.splash-logo-box {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+  border-radius: 24px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 32px rgba(59,130,246,0.4);
+}
+.splash-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.06em;
+  position: relative; z-index: 1;
+}
+.splash-tagline {
+  font-size: 0.65rem;
+  color: rgba(191,219,254,0.7);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 6px;
+  position: relative; z-index: 1;
+}
+.splash-divider {
+  width: 40px; height: 2px;
+  background: linear-gradient(90deg, var(--blue-bright), var(--teal));
+  border-radius: 2px;
+  margin: 22px 0;
+  position: relative; z-index: 1;
+}
+.splash-desc {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  line-height: 1.7;
+  padding: 0 32px;
+  position: relative; z-index: 1;
+}
+.splash-cta {
+  margin-top: 36px;
+  background: linear-gradient(135deg, var(--blue-bright), var(--teal));
+  color: white;
+  border-radius: 50px;
+  padding: 14px 44px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  box-shadow: 0 6px 24px rgba(59,130,246,0.45);
+  letter-spacing: 0.04em;
+  position: relative; z-index: 1;
+}
+.splash-steps {
+  display: flex; gap: 6px;
+  margin-top: 22px;
+  position: relative; z-index: 1;
+}
+.step-dot {
+  height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.25);
+}
+.step-dot.active { width: 22px; background: var(--blue-bright); }
+.step-dot:not(.active) { width: 6px; }
+
+/* ══════════════════════════════════════
+   SCREEN 2 — HOME DASHBOARD
+══════════════════════════════════════ */
+.s-home {
+  height: 100%;
+  background: var(--surface-2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.home-header {
+  background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+  padding: 28px 20px 20px;
+  border-radius: 0 0 28px 28px;
+}
+.home-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.home-greeting { font-size: 0.68rem; color: rgba(191,219,254,0.75); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+.home-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; font-weight: 600; margin-top: 2px; }
+.home-notif-btn {
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.home-mood-card {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mood-q { font-size: 0.72rem; color: rgba(255,255,255,0.8); font-weight: 500; }
+.mood-faces { display: flex; gap: 6px; }
+.mood-face {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.mood-face.sel { background: rgba(255,255,255,0.25); }
+.home-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+.section-label { font-size: 0.65rem; font-weight: 700; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: -4px; }
+.quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.q-card {
+  border-radius: 18px;
+  padding: 16px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s;
+}
+.q-card:hover { transform: translateY(-2px); }
+.q-card.resources { background: var(--blue-pale); border: 1.5px solid var(--blue-light); }
+.q-card.chat      { background: var(--teal-light); border: 1.5px solid #A5F3FC; }
+.q-card.wellness  { background: var(--mint-light); border: 1.5px solid #6EE7B7; }
+.q-card.peers     { background: var(--amber-light); border: 1.5px solid #FDE68A; }
+.q-card-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.q-card.resources .q-card-icon { background: var(--blue-bright); }
+.q-card.chat      .q-card-icon { background: var(--teal); }
+.q-card.wellness  .q-card-icon { background: var(--mint); }
+.q-card.peers     .q-card-icon { background: var(--amber); }
+.q-card-title { font-size: 0.76rem; font-weight: 700; color: var(--text-1); }
+.q-card-sub   { font-size: 0.62rem; color: var(--text-3); font-weight: 500; }
+.crisis-strip {
+  background: linear-gradient(120deg, var(--rose) 0%, #E11D48 100%);
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(244,63,94,0.3);
+  cursor: pointer;
+}
+.crisis-strip-icon {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.18);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.crisis-strip-text { flex: 1; }
+.cst-title { font-size: 0.78rem; font-weight: 700; color: white; }
+.cst-sub   { font-size: 0.63rem; color: rgba(255,255,255,0.75); margin-top: 2px; }
+.crisis-arrow { color: rgba(255,255,255,0.7); }
+.home-nav {
+  display: flex;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 10px 6px 14px;
+}
+.n-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px;
+}
+.n-icon-wrap {
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.n-item.active .n-icon-wrap { background: var(--blue-pale); }
+.n-label { font-size: 0.58rem; font-weight: 600; color: var(--text-3); }
+.n-item.active .n-label { color: var(--blue-bright); }
+
+/* ══════════════════════════════════════
+   SCREEN 3 — RESOURCES
+══════════════════════════════════════ */
+.s-resources {
+  height: 100%;
+  background: var(--surface-2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 28px 18px 12px;
+}
+.back-btn {
+  width: 34px; height: 34px;
+  border-radius: 11px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--sh-sm);
+}
+.screen-h { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text-1); font-weight: 600; flex: 1; }
+.search-row {
+  margin: 0 18px 12px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--sh-sm);
+}
+.search-text { font-size: 0.74rem; color: var(--text-3); font-weight: 500; }
+.chips-row { display: flex; gap: 7px; padding: 0 18px 12px; overflow-x: auto; }
+.chip {
+  border-radius: 50px;
+  padding: 6px 13px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  letter-spacing: 0.04em;
+}
+.chip.on  { background: var(--blue-bright); color: white; }
+.chip.off { background: var(--surface); color: var(--text-2); border-color: var(--border); }
+.res-list { display: flex; flex-direction: column; gap: 9px; padding: 0 18px; overflow-y: auto; flex: 1; padding-bottom: 10px; }
+.res-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 13px 14px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+}
+.res-icon {
+  width: 42px; height: 42px;
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.res-icon.blue   { background: var(--blue-pale); }
+.res-icon.teal   { background: var(--teal-light); }
+.res-icon.mint   { background: var(--mint-light); }
+.res-icon.violet { background: var(--violet-light); }
+.res-icon.amber  { background: var(--amber-light); }
+.res-title { font-size: 0.77rem; font-weight: 700; color: var(--text-1); }
+.res-sub   { font-size: 0.64rem; color: var(--text-3); margin-top: 3px; line-height: 1.4; font-weight: 500; }
+.res-tag {
+  display: inline-block;
+  border-radius: 50px;
+  padding: 2px 9px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  margin-top: 6px;
+  letter-spacing: 0.05em;
+}
+.res-tag.blue   { background: var(--blue-pale);   color: var(--blue-mid); }
+.res-tag.teal   { background: var(--teal-light);   color: #0E7490; }
+.res-tag.mint   { background: var(--mint-light);   color: #047857; }
+.res-tag.violet { background: var(--violet-light); color: var(--violet); }
+.res-tag.amber  { background: var(--amber-light);  color: #B45309; }
+.res-meta { display: flex; align-items: center; gap: 4px; margin-top: 2px; font-size: 0.6rem; color: var(--text-3); }
+
+/* ══════════════════════════════════════
+   SCREEN 4 — CHAT
+══════════════════════════════════════ */
+.s-chat {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.chat-hdr {
+  background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+  padding: 28px 18px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.chat-back-btn {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.chat-av {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-bright), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,0.25);
+}
+.chat-av-initials { font-size: 0.72rem; font-weight: 800; color: white; }
+.chat-hdr-info { flex: 1; }
+.chat-hdr-name { font-size: 0.85rem; font-weight: 700; color: white; }
+.chat-hdr-status { display: flex; align-items: center; gap: 5px; font-size: 0.62rem; color: rgba(191,219,254,0.8); margin-top: 1px; }
+.online-pip { width: 6px; height: 6px; border-radius: 50%; background: #34D399; flex-shrink: 0; }
+.chat-video-btn {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+}
+.chat-msgs { flex: 1; overflow-y: auto; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.msg-row { display: flex; gap: 8px; }
+.msg-row.me { flex-direction: row-reverse; }
+.m-av { width: 26px; height: 26px; border-radius: 50%; background: var(--blue-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.62rem; font-weight: 800; color: var(--blue-mid); }
+.bub { max-width: 185px; padding: 10px 13px; border-radius: 18px; font-size: 0.73rem; line-height: 1.55; font-weight: 500; }
+.bub.them { background: var(--surface); color: var(--text-1); border-bottom-left-radius: 4px; box-shadow: var(--sh-sm); border: 1px solid var(--border); }
+.bub.me   { background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright)); color: white; border-bottom-right-radius: 4px; box-shadow: 0 4px 12px rgba(37,99,168,0.3); }
+.bub-time { font-size: 0.58rem; color: var(--text-3); margin-top: 3px; font-weight: 500; }
+.bub-time.r { text-align: right; }
+.crisis-nudge {
+  margin: 2px 16px;
+  background: var(--rose-light);
+  border: 1.5px solid #FCA5A5;
+  border-radius: 12px;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.cn-text { font-size: 0.68rem; font-weight: 600; color: var(--rose); }
+.chat-input-row {
+  padding: 10px 14px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.chat-inp {
+  flex: 1;
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  padding: 9px 15px;
+  font-size: 0.73rem;
+  color: var(--text-3);
+  outline: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+}
+.send-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--sh-btn);
+}
+
+/* ══════════════════════════════════════
+   SCREEN 5 — WELLNESS TRACKER
+══════════════════════════════════════ */
+.s-wellness {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.well-hdr {
+  background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+  padding: 28px 20px 18px;
+  border-radius: 0 0 28px 28px;
+}
+.well-hdr-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.well-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: white; font-weight: 600; }
+.well-sub   { font-size: 0.64rem; color: rgba(191,219,254,0.7); margin-top: 2px; font-weight: 500; }
+.well-cal-btn {
+  width: 34px; height: 34px;
+  border-radius: 11px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+}
+.week-row { display: flex; gap: 5px; }
+.day-pill {
+  flex: 1;
+  border-radius: 12px;
+  padding: 8px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.day-pill.today { background: white; border-color: white; }
+.dp-lbl { font-size: 0.55rem; font-weight: 700; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.04em; }
+.dp-num { font-size: 0.78rem; font-weight: 800; color: white; }
+.day-pill.today .dp-lbl { color: var(--blue-mid); }
+.day-pill.today .dp-num { color: var(--blue-deep); }
+.dp-pip { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.35); }
+.day-pill.today .dp-pip { background: var(--blue-bright); }
+.day-pill.logged .dp-pip { background: #34D399; }
+
+.well-body { flex: 1; overflow-y: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 11px; }
+.mood-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+}
+.mood-card-lbl { font-size: 0.63rem; font-weight: 700; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.mood-emoji-row { display: flex; justify-content: space-between; }
+.me-face {
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+}
+.me-face.sel { background: var(--blue-pale); border-color: var(--blue-bright); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+.metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+.met-card {
+  background: var(--surface);
+  border-radius: 15px;
+  padding: 13px;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+}
+.met-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.met-icon {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+}
+.met-icon.blue   { background: var(--blue-pale); }
+.met-icon.mint   { background: var(--mint-light); }
+.met-icon.teal   { background: var(--teal-light); }
+.met-icon.amber  { background: var(--amber-light); }
+.met-lbl { font-size: 0.62rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.met-val { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--text-1); font-weight: 700; margin-bottom: 6px; }
+.prog-track { height: 5px; background: var(--border); border-radius: 50px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 50px; }
+.prog-fill.blue   { background: linear-gradient(90deg, var(--blue-mid), var(--blue-bright)); }
+.prog-fill.mint   { background: linear-gradient(90deg, var(--mint), #34D399); }
+.prog-fill.teal   { background: linear-gradient(90deg, var(--teal), #22D3EE); }
+.prog-fill.amber  { background: linear-gradient(90deg, var(--amber), #FCD34D); }
+.well-log-btn {
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+  border-radius: 15px;
+  padding: 14px;
+  color: white;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--sh-btn);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+
+/* ══════════════════════════════════════
+   SCREEN 6 — PEER NETWORK
+══════════════════════════════════════ */
+.s-peers {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.peers-hdr {
+  background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+  padding: 28px 18px 18px;
+  border-radius: 0 0 28px 28px;
+}
+.peers-hdr-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.peers-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: white; font-weight: 600; }
+.peers-sub   { font-size: 0.64rem; color: rgba(191,219,254,0.7); margin-top: 2px; font-weight: 500; }
+.peers-filter-btn {
+  width: 34px; height: 34px;
+  border-radius: 11px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+}
+.peers-search {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 9px 13px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.7rem; color: rgba(255,255,255,0.5); font-weight: 500;
+}
+.peers-body { flex: 1; overflow-y: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; }
+.feat-educator {
+  background: linear-gradient(120deg, #1E4D8C 0%, #2563A8 100%);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border: 1px solid rgba(59,130,246,0.3);
+  box-shadow: 0 6px 24px rgba(26,58,92,0.25);
+}
+.edu-av-lg {
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-bright), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; font-weight: 800; color: white;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,0.25);
+}
+.edu-name { font-size: 0.88rem; font-weight: 700; color: white; }
+.edu-role { font-size: 0.63rem; color: rgba(191,219,254,0.8); margin-top: 1px; font-weight: 500; }
+.edu-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(245,158,11,0.9);
+  border-radius: 50px;
+  padding: 2px 9px;
+  font-size: 0.58rem; font-weight: 700; color: white;
+  margin-top: 5px;
+  letter-spacing: 0.05em;
+}
+.book-mini-btn {
+  margin-left: auto;
+  background: white;
+  color: var(--blue-mid);
+  border-radius: 50px;
+  padding: 8px 14px;
+  font-size: 0.65rem; font-weight: 700;
+  border: none; cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.peers-sect-lbl { font-size: 0.62rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; }
+.peer-card {
+  background: var(--surface);
+  border-radius: 15px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.peer-av {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 800;
+  flex-shrink: 0;
+}
+.peer-card-name { font-size: 0.78rem; font-weight: 700; color: var(--text-1); }
+.peer-card-spec { font-size: 0.62rem; color: var(--text-3); margin-top: 1px; font-weight: 500; }
+.ptags { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+.ptag { border-radius: 50px; padding: 2px 8px; font-size: 0.57rem; font-weight: 700; background: var(--blue-pale); color: var(--blue-mid); }
+.avail-col { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.avail-pip { width: 8px; height: 8px; border-radius: 50%; }
+.avail-pip.on  { background: var(--mint); }
+.avail-pip.off { background: var(--amber); }
+.avail-txt { font-size: 0.58rem; color: var(--text-3); font-weight: 600; }
+
+/* ══════════════════════════════════════
+   SCREEN 7 — CRISIS HELP
+══════════════════════════════════════ */
+.s-crisis {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.crisis-hdr {
+  background: linear-gradient(160deg, #7F1D1D 0%, #B91C1C 50%, var(--rose) 100%);
+  padding: 28px 18px 20px;
+  border-radius: 0 0 28px 28px;
+  text-align: center;
+}
+.crisis-hdr-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px;
+}
+.crisis-hdr-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: white; font-weight: 700; }
+.crisis-hdr-sub   { font-size: 0.68rem; color: rgba(255,255,255,0.7); margin-top: 5px; line-height: 1.6; padding: 0 16px; font-weight: 500; }
+.crisis-body { flex: 1; overflow-y: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; }
+.sos-card {
+  background: linear-gradient(135deg, var(--rose) 0%, #E11D48 100%);
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(244,63,94,0.4);
+}
+.sos-icon-box {
+  width: 44px; height: 44px;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.sos-title { font-size: 0.88rem; font-weight: 800; color: white; }
+.sos-sub   { font-size: 0.63rem; color: rgba(255,255,255,0.75); margin-top: 2px; font-weight: 500; }
+.cr-resource {
+  background: var(--surface);
+  border-radius: 15px;
+  padding: 13px 14px;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.cr-ic {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.cr-title { font-size: 0.77rem; font-weight: 700; color: var(--text-1); }
+.cr-sub   { font-size: 0.62rem; color: var(--text-3); margin-top: 2px; font-weight: 500; }
+.cr-chev  { margin-left: auto; color: var(--text-3); }
+.breathe-card {
+  background: linear-gradient(135deg, var(--violet-light) 0%, #DDD6FE 100%);
+  border-radius: 16px;
+  padding: 14px 16px;
+  text-align: center;
+  border: 1.5px solid #C4B5FD;
+}
+.breathe-lbl { font-size: 0.78rem; font-weight: 700; color: var(--violet); }
+.breathe-hint { font-size: 0.62rem; color: #5B21B6; margin-top: 2px; font-weight: 500; }
+.breathe-anim {
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  background: var(--violet);
+  margin: 11px auto 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700; color: white;
+  animation: pulse-breathe 4s ease-in-out infinite;
+}
+@keyframes pulse-breathe {
+  0%,100% { transform: scale(1); opacity: 0.75; }
+  50%      { transform: scale(1.22); opacity: 1; }
+}
+
+/* ══════════════════════════════════════
+   SCREEN 8 — BOOK SESSION
+══════════════════════════════════════ */
+.s-book {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.book-peer-row {
+  margin: 8px 18px 14px;
+  background: var(--surface);
+  border-radius: 18px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+}
+.book-av {
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-bright), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; font-weight: 800; color: white;
+  flex-shrink: 0;
+  border: 2px solid var(--blue-light);
+}
+.book-peer-name { font-size: 0.86rem; font-weight: 700; color: var(--text-1); }
+.book-peer-role { font-size: 0.62rem; color: var(--text-3); margin-top: 1px; font-weight: 500; }
+.book-stars     { font-size: 0.62rem; color: var(--amber); margin-top: 3px; font-weight: 600; }
+.book-body { flex: 1; overflow-y: auto; padding: 0 18px; display: flex; flex-direction: column; gap: 12px; padding-bottom: 8px; }
+.book-lbl { font-size: 0.62rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
+.mini-cal {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 13px 14px;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+}
+.cal-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.78rem; font-weight: 700; color: var(--text-1); }
+.cal-nav { color: var(--blue-bright); cursor: pointer; font-size: 1rem; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cgl { font-size: 0.54rem; color: var(--text-3); text-align: center; font-weight: 700; padding-bottom: 3px; }
+.cd {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.63rem; color: var(--text-2); font-weight: 600;
+  cursor: pointer;
+  margin: auto;
+}
+.cd.today { background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright)); color: white; font-weight: 800; }
+.cd.avail { color: var(--blue-bright); }
+.cd.sel   { background: var(--blue-pale); color: var(--blue-mid); font-weight: 800; border: 1.5px solid var(--blue-bright); }
+.cd.dim   { color: var(--border); }
+.time-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.t-slot {
+  background: var(--surface);
+  border-radius: 11px;
+  padding: 9px 6px;
+  text-align: center;
+  font-size: 0.68rem; font-weight: 700;
+  color: var(--text-2);
+  cursor: pointer;
+  box-shadow: var(--sh-sm);
+  border: 1.5px solid var(--border);
+}
+.t-slot.sel { border-color: var(--blue-bright); color: var(--blue-mid); background: var(--blue-pale); }
+.t-slot.na  { opacity: 0.33; cursor: default; }
+.stype-row { display: flex; gap: 7px; }
+.stype-btn {
+  flex: 1;
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 10px 7px;
+  text-align: center;
+  font-size: 0.66rem; font-weight: 700;
+  color: var(--text-2);
+  cursor: pointer;
+  box-shadow: var(--sh-sm);
+  border: 1.5px solid var(--border);
+}
+.stype-btn.sel { border-color: var(--blue-bright); color: var(--blue-mid); background: var(--blue-pale); }
+.stype-ic { margin-bottom: 3px; }
+.confirm-btn {
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+  border-radius: 14px;
+  padding: 14px;
+  color: white;
+  text-align: center;
+  font-size: 0.82rem; font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--sh-btn);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  letter-spacing: 0.02em;
+}
+
+/* ══════════════════════════════════════
+   SCREEN 9 — ONBOARDING / PROFILE SETUP
+══════════════════════════════════════ */
+.s-onboard {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.onboard-hdr {
+  background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+  padding: 28px 20px 22px;
+  border-radius: 0 0 28px 28px;
+}
+.onboard-progress { display: flex; gap: 5px; margin-bottom: 14px; }
+.prog-seg { height: 3px; flex: 1; border-radius: 50px; background: rgba(255,255,255,0.2); }
+.prog-seg.done { background: var(--blue-bright); }
+.prog-seg.active { background: white; }
+.onboard-step { font-size: 0.62rem; color: rgba(191,219,254,0.7); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.onboard-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: white; font-weight: 600; margin-top: 4px; }
+.onboard-sub   { font-size: 0.68rem; color: rgba(191,219,254,0.75); margin-top: 4px; font-weight: 500; line-height: 1.5; }
+.onboard-body { flex: 1; padding: 16px 18px; display: flex; flex-direction: column; gap: 11px; overflow-y: auto; }
+.topic-label { font-size: 0.62rem; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
+.topics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.topic-chip {
+  background: var(--surface);
+  border-radius: 13px;
+  padding: 11px 12px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  box-shadow: var(--sh-sm);
+  border: 1.5px solid var(--border);
+}
+.topic-chip.sel { border-color: var(--blue-bright); background: var(--blue-pale); }
+.topic-chip-ic {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.topic-chip-txt { font-size: 0.7rem; font-weight: 700; color: var(--text-1); }
+.topic-chip.sel .topic-chip-txt { color: var(--blue-mid); }
+.anon-notice {
+  background: var(--blue-pale);
+  border: 1.5px solid var(--blue-light);
+  border-radius: 13px;
+  padding: 11px 12px;
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+.anon-ic { color: var(--blue-bright); flex-shrink: 0; margin-top: 1px; }
+.anon-text { font-size: 0.67rem; color: var(--blue-mid); font-weight: 500; line-height: 1.5; }
+.onboard-cta {
+  background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+  border-radius: 14px;
+  padding: 14px;
+  color: white;
+  text-align: center;
+  font-size: 0.82rem; font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--sh-btn);
+  margin-top: auto;
+}
+
+/* ══════════════════════════════════════
+   SCREEN 10 — PROFILE / SETTINGS
+══════════════════════════════════════ */
+.s-profile {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.profile-hdr {
+  background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+  padding: 28px 20px 22px;
+  border-radius: 0 0 28px 28px;
+  text-align: center;
+}
+.profile-av-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.profile-av {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-bright), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; font-weight: 800; color: white;
+  border: 3px solid rgba(255,255,255,0.3);
+}
+.profile-edit-dot {
+  position: absolute;
+  bottom: 2px; right: 2px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--blue-bright);
+  border: 2px solid white;
+  display: flex; align-items: center; justify-content: center;
+}
+.profile-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: white; font-weight: 600; }
+.profile-school { font-size: 0.65rem; color: rgba(191,219,254,0.75); margin-top: 2px; font-weight: 500; }
+.profile-badges { display: flex; gap: 6px; justify-content: center; margin-top: 10px; }
+.p-badge {
+  border-radius: 50px;
+  padding: 4px 12px;
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.p-badge.blue   { background: rgba(59,130,246,0.25); color: var(--blue-light); border: 1px solid rgba(59,130,246,0.3); }
+.p-badge.mint   { background: rgba(16,185,129,0.2); color: #6EE7B7; border: 1px solid rgba(16,185,129,0.3); }
+.profile-body { flex: 1; overflow-y: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 11px; }
+.profile-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.pstat {
+  background: var(--surface);
+  border-radius: 13px;
+  padding: 11px 8px;
+  text-align: center;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+}
+.pstat-val { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--blue-mid); }
+.pstat-lbl { font-size: 0.58rem; color: var(--text-3); font-weight: 600; margin-top: 2px; }
+.settings-group {
+  background: var(--surface);
+  border-radius: 16px;
+  box-shadow: var(--sh-sm);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.setting-row:last-child { border-bottom: none; }
+.set-icon {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.set-lbl { font-size: 0.74rem; font-weight: 600; color: var(--text-1); flex: 1; }
+.set-chev { color: var(--text-3); }
+.set-toggle {
+  width: 34px; height: 20px;
+  border-radius: 50px;
+  background: var(--blue-bright);
+  position: relative;
+  cursor: pointer;
+}
+.set-toggle::after {
+  content: '';
+  position: absolute;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: white;
+  top: 2px; right: 2px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+.set-toggle.off { background: var(--border); }
+.set-toggle.off::after { right: auto; left: 2px; }
+.logout-row { display: flex; align-items: center; gap: 11px; padding: 12px 14px; cursor: pointer; }
+.logout-lbl { font-size: 0.74rem; font-weight: 700; color: var(--rose); flex: 1; }
+</style>
+</head>
+<body>
+
+<!-- ─── PAGE HEADER ─── -->
+<div class="page-header">
+  <div class="page-logo">
+    <div class="page-logo-icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3C8 3 4 7 4 12s4 9 8 9 8-4 8-9-4-9-8-9z" fill="rgba(255,255,255,0.15)"/>
+        <path d="M12 6c-1.5 2-2 4-1 6.5C8 13 6 11 6 9c0-3 2.5-5 6-5z" fill="white"/>
+        <path d="M12 6c1.5 2 2 4 1 6.5C16 13 18 11 18 9c0-3-2.5-5-6-5z" fill="rgba(255,255,255,0.7)"/>
+        <path d="M11 12.5C11 16 12 18 12 18s1-2 1-5.5" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <span class="page-title">PEACE</span>
+  </div>
+  <p class="page-sub">Peer Educators Club · Premium UI Kit · 10 Screens</p>
+</div>
+
+<!-- ─── SCREEN GRID ─── -->
+<div class="screens-grid">
+
+<!-- ════ 01 SPLASH ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-splash">
+        <div class="splash-orb-1"></div>
+        <div class="splash-orb-2"></div>
+        <div class="splash-ring">
+          <div class="splash-logo-box">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none">
+              <path d="M12 4C9 4 6 7 6 11s3 7 6 7 6-3 6-7-3-7-6-7z" fill="rgba(255,255,255,0.15)"/>
+              <path d="M12 5c-1.5 2.2-2 4.5-1 7C8.5 12.5 7 10 7 8c0-2.5 2-4 5-4z" fill="white"/>
+              <path d="M12 5c1.5 2.2 2 4.5 1 7C15.5 12.5 17 10 17 8c0-2.5-2-4-5-4z" fill="rgba(255,255,255,0.65)"/>
+              <path d="M11.5 12C11.5 16 12 19 12 19s.5-3 .5-7" stroke="white" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+        <div class="splash-title">PEACE</div>
+        <div class="splash-tagline">Peer Educators Club</div>
+        <div class="splash-divider"></div>
+        <div class="splash-desc">A safe space to connect, heal and grow — together with your peers.</div>
+        <button class="splash-cta">Get Started</button>
+        <div class="splash-steps">
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>01 · Splash Screen</div>
+</div>
+
+<!-- ════ 02 HOME DASHBOARD ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-home">
+        <div class="home-header">
+          <div class="sbar dark" style="padding:28px 0 0 0;margin-bottom:8px;">
+            <span>9:41</span>
+            <div class="sbar-right">
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="white" opacity=".8"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/><rect x="12" y="2" width="2" height="8" rx="1"/></svg>
+              <svg width="15" height="11" viewBox="0 0 15 11" fill="white" opacity=".8"><path d="M7.5 2C5 2 2.8 3 1.2 4.7L0 3.5C2 1.3 4.6 0 7.5 0s5.5 1.3 7.5 3.5l-1.2 1.2C12.2 3 10 2 7.5 2z"/><path d="M7.5 5c-1.5 0-2.8.6-3.8 1.5L2.5 5.3C3.8 4 5.5 3.2 7.5 3.2S11.2 4 12.5 5.3l-1.2 1.2C10.3 5.6 9 5 7.5 5z"/><circle cx="7.5" cy="9" r="1.5"/></svg>
+              <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="18" height="10" rx="2.5" stroke="white" stroke-opacity=".5"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="white"/><path d="M20 3.5v4a2 2 0 000-4z" fill="white" opacity=".5"/></svg>
+            </div>
+          </div>
+          <div class="home-top-row">
+            <div>
+              <div class="home-greeting">Good morning ☀️</div>
+              <div class="home-name">Tariro</div>
+            </div>
+            <div class="home-notif-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            </div>
+          </div>
+          <div class="home-mood-card">
+            <div class="mood-q">How are you feeling today?</div>
+            <div class="mood-faces">
+              <div class="mood-face">😔</div>
+              <div class="mood-face">😐</div>
+              <div class="mood-face sel">🙂</div>
+              <div class="mood-face">😊</div>
+              <div class="mood-face">🤩</div>
+            </div>
+          </div>
+        </div>
+        <div class="home-body">
+          <div class="section-label">Quick Access</div>
+          <div class="quick-grid">
+            <div class="q-card resources">
+              <div class="q-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+              </div>
+              <div class="q-card-title">Resources</div>
+              <div class="q-card-sub">Tips &amp; guides</div>
+            </div>
+            <div class="q-card chat">
+              <div class="q-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+              </div>
+              <div class="q-card-title">Chat</div>
+              <div class="q-card-sub">Talk to an educator</div>
+            </div>
+            <div class="q-card wellness">
+              <div class="q-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div class="q-card-title">Wellness</div>
+              <div class="q-card-sub">Track your mood</div>
+            </div>
+            <div class="q-card peers">
+              <div class="q-card-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+              </div>
+              <div class="q-card-title">Peer Network</div>
+              <div class="q-card-sub">Connect &amp; book</div>
+            </div>
+          </div>
+          <div class="section-label">Urgent Support</div>
+          <div class="crisis-strip">
+            <div class="crisis-strip-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.3" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="crisis-strip-text">
+              <div class="cst-title">Crisis Help</div>
+              <div class="cst-sub">You are never alone — help is here</div>
+            </div>
+            <div class="crisis-arrow">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="home-nav">
+          <div class="n-item active">
+            <div class="n-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+            <div class="n-label" style="color:#3B82F6">Home</div>
+          </div>
+          <div class="n-item">
+            <div class="n-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B96B2" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+            <div class="n-label">Chat</div>
+          </div>
+          <div class="n-item">
+            <div class="n-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B96B2" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div class="n-label">Wellness</div>
+          </div>
+          <div class="n-item">
+            <div class="n-icon-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7B96B2" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <div class="n-label">Profile</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>02 · Home Dashboard</div>
+</div>
+
+<!-- ════ 03 RESOURCES ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-resources">
+        <div class="sbar light"><span>9:41</span><div class="sbar-right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x=".5" y=".5" width="18" height="10" rx="2.5" stroke="#3D5A7A" stroke-opacity=".4"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="#3D5A7A"/><path d="M20 3.5v4a2 2 0 000-4z" fill="#3D5A7A" opacity=".4"/></svg></div></div>
+        <div class="top-bar">
+          <div class="back-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563A8" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+          <div class="screen-h">Resources</div>
+          <div class="back-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7B96B2" stroke-width="2" stroke-linecap="round"><line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/></svg></div>
+        </div>
+        <div class="search-row">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7B96B2" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span class="search-text">Search articles, guides...</span>
+        </div>
+        <div class="chips-row">
+          <div class="chip on">All</div>
+          <div class="chip off">Mental Health</div>
+          <div class="chip off">Study Tips</div>
+          <div class="chip off">Self-Care</div>
+        </div>
+        <div class="res-list">
+          <div class="res-card">
+            <div class="res-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div>
+              <div class="res-title">Managing Exam Anxiety</div>
+              <div class="res-sub">Practical techniques to stay calm during exam season</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
+                <span class="res-tag blue">Mental Health</span>
+                <div class="res-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>5 min</div>
+              </div>
+            </div>
+          </div>
+          <div class="res-card">
+            <div class="res-icon teal"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0EA5C9" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div>
+              <div class="res-title">Time Management 101</div>
+              <div class="res-sub">Plan your week without burning out completely</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
+                <span class="res-tag teal">Study Tips</span>
+                <div class="res-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>7 min</div>
+              </div>
+            </div>
+          </div>
+          <div class="res-card">
+            <div class="res-icon mint"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+            <div>
+              <div class="res-title">Healthy Relationships</div>
+              <div class="res-sub">Recognizing boundaries and communication</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
+                <span class="res-tag mint">Relationships</span>
+                <div class="res-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>6 min</div>
+              </div>
+            </div>
+          </div>
+          <div class="res-card">
+            <div class="res-icon violet"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+            <div>
+              <div class="res-title">Sleep &amp; Student Wellness</div>
+              <div class="res-sub">Why rest is your academic superpower</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
+                <span class="res-tag violet">Self-Care</span>
+                <div class="res-meta"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>4 min</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>03 · Resources</div>
+</div>
+
+<!-- ════ 04 CHAT ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-chat">
+        <div class="chat-hdr">
+          <div class="sbar dark" style="padding:28px 0 0;width:100%;margin-bottom:6px"><span>9:41</span><div class="sbar-right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x=".5" y=".5" width="18" height="10" rx="2.5" stroke="white" stroke-opacity=".5"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="white"/><path d="M20 3.5v4a2 2 0 000-4z" fill="white" opacity=".5"/></svg></div></div>
+          <div class="chat-back-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+          <div class="chat-av"><span class="chat-av-initials">CM</span></div>
+          <div class="chat-hdr-info">
+            <div class="chat-hdr-name">Chido Mutasa</div>
+            <div class="chat-hdr-status"><div class="online-pip"></div>Peer Educator · Online</div>
+          </div>
+          <div class="chat-video-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+        </div>
+        <div class="chat-msgs">
+          <div class="msg-row">
+            <div class="m-av">CM</div>
+            <div><div class="bub them">Hi! I'm Chido, your peer educator. How can I support you today? 😊</div><div class="bub-time">10:02 AM</div></div>
+          </div>
+          <div class="msg-row me">
+            <div><div class="bub me">Hey Chido! I've been really stressed about my exams and I don't know how to cope.</div><div class="bub-time r">10:04 AM</div></div>
+          </div>
+          <div class="msg-row">
+            <div class="m-av">CM</div>
+            <div><div class="bub them">I hear you — exam stress is very real. Let's talk through it. How's your sleep been lately?</div><div class="bub-time">10:05 AM</div></div>
+          </div>
+          <div class="msg-row me">
+            <div><div class="bub me">Not great... I stay up past 2am most nights studying.</div><div class="bub-time r">10:06 AM</div></div>
+          </div>
+        </div>
+        <div class="crisis-nudge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2.3" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span class="cn-text">Feeling overwhelmed? <b>Tap for Crisis Help</b></span>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-inp" placeholder="Type a message..."/>
+          <div class="send-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.3" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>04 · Chat Screen</div>
+</div>
+
+<!-- ════ 05 WELLNESS TRACKER ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-wellness">
+        <div class="well-hdr">
+          <div class="sbar dark" style="padding:28px 0 0;margin-bottom:8px"><span>9:41</span><div class="sbar-right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x=".5" y=".5" width="18" height="10" rx="2.5" stroke="white" stroke-opacity=".5"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="white"/><path d="M20 3.5v4a2 2 0 000-4z" fill="white" opacity=".5"/></svg></div></div>
+          <div class="well-hdr-top">
+            <div><div class="well-title">Wellness Tracker</div><div class="well-sub">Week of March 24 – 30, 2026</div></div>
+            <div class="well-cal-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          </div>
+          <div class="week-row">
+            <div class="day-pill logged"><div class="dp-lbl">Mo</div><div class="dp-num">24</div><div class="dp-pip"></div></div>
+            <div class="day-pill today"><div class="dp-lbl">Tu</div><div class="dp-num">25</div><div class="dp-pip"></div></div>
+            <div class="day-pill"><div class="dp-lbl">We</div><div class="dp-num">26</div><div class="dp-pip"></div></div>
+            <div class="day-pill"><div class="dp-lbl">Th</div><div class="dp-num">27</div><div class="dp-pip"></div></div>
+            <div class="day-pill"><div class="dp-lbl">Fr</div><div class="dp-num">28</div><div class="dp-pip"></div></div>
+            <div class="day-pill"><div class="dp-lbl">Sa</div><div class="dp-num">29</div><div class="dp-pip"></div></div>
+            <div class="day-pill"><div class="dp-lbl">Su</div><div class="dp-num">30</div><div class="dp-pip"></div></div>
+          </div>
+        </div>
+        <div class="well-body">
+          <div class="mood-card">
+            <div class="mood-card-lbl">Today's Mood</div>
+            <div class="mood-emoji-row">
+              <div class="me-face">😞</div>
+              <div class="me-face">😕</div>
+              <div class="me-face sel">😌</div>
+              <div class="me-face">😊</div>
+              <div class="me-face">🤩</div>
+            </div>
+          </div>
+          <div class="metrics-grid">
+            <div class="met-card">
+              <div class="met-top">
+                <div class="met-icon blue"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round"><path d="M17 18a5 5 0 00-10 0"/><line x1="12" y1="2" x2="12" y2="9"/><line x1="4.22" y1="10.22" x2="5.64" y2="11.64"/><line x1="1" y1="18" x2="3" y2="18"/><line x1="21" y1="18" x2="23" y2="18"/><line x1="18.36" y1="11.64" x2="19.78" y2="10.22"/></svg></div>
+                <div class="met-lbl">Sleep</div>
+              </div>
+              <div class="met-val">6.5h</div>
+              <div class="prog-track"><div class="prog-fill blue" style="width:72%"></div></div>
+            </div>
+            <div class="met-card">
+              <div class="met-top">
+                <div class="met-icon mint"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2" stroke-linecap="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+                <div class="met-lbl">Activity</div>
+              </div>
+              <div class="met-val">3,240</div>
+              <div class="prog-track"><div class="prog-fill mint" style="width:58%"></div></div>
+            </div>
+            <div class="met-card">
+              <div class="met-top">
+                <div class="met-icon teal"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0EA5C9" stroke-width="2.2" stroke-linecap="round"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div>
+                <div class="met-lbl">Water</div>
+              </div>
+              <div class="met-val">1.7L</div>
+              <div class="prog-track"><div class="prog-fill teal" style="width:85%"></div></div>
+            </div>
+            <div class="met-card">
+              <div class="met-top">
+                <div class="met-icon amber"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+                <div class="met-lbl">Mindfulness</div>
+              </div>
+              <div class="met-val">10m</div>
+              <div class="prog-track"><div class="prog-fill amber" style="width:44%"></div></div>
+            </div>
+          </div>
+          <div class="well-log-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.3" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Log Today's Check-in
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>05 · Wellness Tracker</div>
+</div>
+
+<!-- ════ 06 PEER NETWORK ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-peers">
+        <div class="peers-hdr">
+          <div class="sbar dark" style="padding:28px 0 0;margin-bottom:8px"><span>9:41</span><div class="sbar-right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x=".5" y=".5" width="18" height="10" rx="2.5" stroke="white" stroke-opacity=".5"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="white"/><path d="M20 3.5v4a2 2 0 000-4z" fill="white" opacity=".5"/></svg></div></div>
+          <div class="peers-hdr-top">
+            <div><div class="peers-title">Peer Network</div><div class="peers-sub">Connect with trained peer educators</div></div>
+            <div class="peers-filter-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/></svg></div>
+          </div>
+          <div class="peers-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Search educators...</div>
+        </div>
+        <div class="peers-body">
+          <div class="feat-educator">
+            <div class="edu-av-lg">CM</div>
+            <div style="flex:1">
+              <div class="edu-name">Chido Mutasa</div>
+              <div class="edu-role">Mental Health &amp; Study Skills</div>
+              <div class="edu-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="white"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Top Educator</div>
+            </div>
+            <button class="book-mini-btn">Book →</button>
+          </div>
+          <div class="peers-sect-lbl">All Peer Educators</div>
+          <div class="peer-card">
+            <div class="peer-av" style="background:#EDE9FE;color:#7C3AED">TB</div>
+            <div>
+              <div class="peer-card-name">Tafadzwa B.</div>
+              <div class="peer-card-spec">Relationships &amp; Wellness</div>
+              <div class="ptags"><span class="ptag">Counselling</span><span class="ptag">Stress</span></div>
+            </div>
+            <div class="avail-col"><div class="avail-pip on"></div><div class="avail-txt">Available</div></div>
+          </div>
+          <div class="peer-card">
+            <div class="peer-av" style="background:#FEF3C7;color:#B45309">RN</div>
+            <div>
+              <div class="peer-card-name">Rudo Nhliziyo</div>
+              <div class="peer-card-spec">Academic Support &amp; Anxiety</div>
+              <div class="ptags"><span class="ptag">Exams</span><span class="ptag">Focus</span></div>
+            </div>
+            <div class="avail-col"><div class="avail-pip off"></div><div class="avail-txt">Busy</div></div>
+          </div>
+          <div class="peer-card">
+            <div class="peer-av" style="background:#CFFAFE;color:#0E7490">MK</div>
+            <div>
+              <div class="peer-card-name">Munashe K.</div>
+              <div class="peer-card-spec">Substance Use &amp; Life Skills</div>
+              <div class="ptags"><span class="ptag">Prevention</span><span class="ptag">Coping</span></div>
+            </div>
+            <div class="avail-col"><div class="avail-pip on"></div><div class="avail-txt">Available</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>06 · Peer Network</div>
+</div>
+
+<!-- ════ 07 CRISIS HELP ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-crisis">
+        <div class="crisis-hdr">
+          <div class="sbar dark" style="padding:28px 0 0;margin-bottom:4px"><span>9:41</span><div class="sbar-right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x=".5" y=".5" width="18" height="10" rx="2.5" stroke="white" stroke-opacity=".5"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="white"/><path d="M20 3.5v4a2 2 0 000-4z" fill="white" opacity=".5"/></svg></div></div>
+          <div class="crisis-hdr-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <div class="crisis-hdr-title">Crisis Help</div>
+          <div class="crisis-hdr-sub">You are not alone. Help is available right now — please reach out.</div>
+        </div>
+        <div class="crisis-body">
+          <div class="sos-card">
+            <div class="sos-icon-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.09 9.11 19.79 19.79 0 01.12 2.18 2 2 0 012.11 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.11 7.37a16 16 0 006.52 6.52l1.75-1.75a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.29v2.63z"/></svg></div>
+            <div><div class="sos-title">Call Crisis Helpline</div><div class="sos-sub">Speak to a counsellor now — available 24/7</div></div>
+          </div>
+          <div class="cr-resource">
+            <div class="cr-ic" style="background:var(--violet-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+            <div><div class="cr-title">Guided Breathing Exercise</div><div class="cr-sub">Calm your nervous system in 3 minutes</div></div>
+            <div class="cr-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="breathe-card">
+            <div class="breathe-lbl">Box Breathing</div>
+            <div class="breathe-hint">Inhale 4s · Hold 4s · Exhale 4s · Hold 4s</div>
+            <div class="breathe-anim">Breathe</div>
+          </div>
+          <div class="cr-resource">
+            <div class="cr-ic" style="background:var(--blue-pale)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+            <div><div class="cr-title">Chat with a Peer Educator</div><div class="cr-sub">Anonymous — a real person responds</div></div>
+            <div class="cr-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="cr-resource">
+            <div class="cr-ic" style="background:var(--mint-light)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+            <div><div class="cr-title">Crisis Safety Plan</div><div class="cr-sub">Build your personal support plan</div></div>
+            <div class="cr-chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>07 · Crisis Help</div>
+</div>
+
+<!-- ════ 08 BOOK SESSION ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-book">
+        <div class="sbar light"><span>9:41</span><div class="sbar-right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x=".5" y=".5" width="18" height="10" rx="2.5" stroke="#3D5A7A" stroke-opacity=".4"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="#3D5A7A"/><path d="M20 3.5v4a2 2 0 000-4z" fill="#3D5A7A" opacity=".4"/></svg></div></div>
+        <div class="top-bar">
+          <div class="back-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563A8" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+          <div class="screen-h">Book a Session</div>
+        </div>
+        <div class="book-peer-row">
+          <div class="book-av">CM</div>
+          <div>
+            <div class="book-peer-name">Chido Mutasa</div>
+            <div class="book-peer-role">Peer Educator · Mental Health</div>
+            <div class="book-stars">★★★★★ 4.9 · 32 sessions</div>
+          </div>
+        </div>
+        <div class="book-body">
+          <div class="book-lbl">Choose a Date</div>
+          <div class="mini-cal">
+            <div class="cal-hdr"><span class="cal-nav">‹</span><span>March 2026</span><span class="cal-nav">›</span></div>
+            <div class="cal-grid">
+              <div class="cgl">S</div><div class="cgl">M</div><div class="cgl">T</div><div class="cgl">W</div><div class="cgl">T</div><div class="cgl">F</div><div class="cgl">S</div>
+              <div class="cd dim">1</div><div class="cd dim">2</div><div class="cd dim">3</div><div class="cd avail">4</div><div class="cd avail">5</div><div class="cd avail">6</div><div class="cd">7</div>
+              <div class="cd">8</div><div class="cd avail">9</div><div class="cd avail">10</div><div class="cd avail">11</div><div class="cd avail">12</div><div class="cd avail">13</div><div class="cd">14</div>
+              <div class="cd">15</div><div class="cd avail">16</div><div class="cd avail">17</div><div class="cd avail">18</div><div class="cd avail">19</div><div class="cd avail">20</div><div class="cd">21</div>
+              <div class="cd">22</div><div class="cd avail">23</div><div class="cd today">24</div><div class="cd sel">25</div><div class="cd avail">26</div><div class="cd avail">27</div><div class="cd">28</div>
+            </div>
+          </div>
+          <div class="book-lbl">Pick a Time — Tue 25 Mar</div>
+          <div class="time-grid">
+            <div class="t-slot na">8:00 AM</div><div class="t-slot">10:00 AM</div><div class="t-slot sel">11:30 AM</div>
+            <div class="t-slot">1:00 PM</div><div class="t-slot na">2:30 PM</div><div class="t-slot">4:00 PM</div>
+          </div>
+          <div class="book-lbl">Session Type</div>
+          <div class="stype-row">
+            <div class="stype-btn sel"><div class="stype-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>Video</div>
+            <div class="stype-btn"><div class="stype-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7B96B2" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.09 9.11a2 2 0 011.95-2.11h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L9.01 13.37a16 16 0 006.52 6.52l1.38-1.38a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 20.92v-4z"/></svg></div>Voice</div>
+            <div class="stype-btn"><div class="stype-ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7B96B2" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>Chat</div>
+          </div>
+          <div class="confirm-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Confirm Booking
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>08 · Book Session</div>
+</div>
+
+<!-- ════ 09 ONBOARDING ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-onboard">
+        <div class="onboard-hdr">
+          <div class="sbar dark" style="padding:28px 0 0;margin-bottom:10px"><span>9:41</span><div class="sbar-right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x=".5" y=".5" width="18" height="10" rx="2.5" stroke="white" stroke-opacity=".5"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="white"/><path d="M20 3.5v4a2 2 0 000-4z" fill="white" opacity=".5"/></svg></div></div>
+          <div class="onboard-progress">
+            <div class="prog-seg done"></div>
+            <div class="prog-seg active"></div>
+            <div class="prog-seg"></div>
+            <div class="prog-seg"></div>
+          </div>
+          <div class="onboard-step">Step 2 of 4</div>
+          <div class="onboard-title">What matters to you?</div>
+          <div class="onboard-sub">Select topics so we can personalise your PEACE experience.</div>
+        </div>
+        <div class="onboard-body">
+          <div class="topic-label">Choose your focus areas</div>
+          <div class="topics-grid">
+            <div class="topic-chip sel">
+              <div class="topic-chip-ic" style="background:var(--blue-pale)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round"><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="topic-chip-txt">Mental Health</div>
+            </div>
+            <div class="topic-chip">
+              <div class="topic-chip-ic" style="background:var(--mint-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+              <div class="topic-chip-txt">Study Skills</div>
+            </div>
+            <div class="topic-chip sel">
+              <div class="topic-chip-ic" style="background:var(--rose-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2.2" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+              <div class="topic-chip-txt">Relationships</div>
+            </div>
+            <div class="topic-chip">
+              <div class="topic-chip-ic" style="background:var(--amber-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="topic-chip-txt">Time Mgmt</div>
+            </div>
+            <div class="topic-chip">
+              <div class="topic-chip-ic" style="background:var(--violet-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.2" stroke-linecap="round"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
+              <div class="topic-chip-txt">Self-Care</div>
+            </div>
+            <div class="topic-chip">
+              <div class="topic-chip-ic" style="background:var(--teal-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0EA5C9" stroke-width="2.2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+              <div class="topic-chip-txt">Wellness</div>
+            </div>
+          </div>
+          <div class="anon-notice">
+            <div class="anon-ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <div class="anon-text">Your selections are private. We use them only to personalise your content — never shared.</div>
+          </div>
+          <div class="onboard-cta">Continue →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>09 · Onboarding</div>
+</div>
+
+<!-- ════ 10 PROFILE / SETTINGS ════ -->
+<div class="phone-wrap">
+  <div class="phone-frame">
+    <div class="phone-inner">
+      <div class="s-profile">
+        <div class="profile-hdr">
+          <div class="sbar dark" style="padding:28px 0 0;margin-bottom:8px"><span>9:41</span><div class="sbar-right"><svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x=".5" y=".5" width="18" height="10" rx="2.5" stroke="white" stroke-opacity=".5"/><rect x="1.5" y="1.5" width="14" height="8" rx="1.5" fill="white"/><path d="M20 3.5v4a2 2 0 000-4z" fill="white" opacity=".5"/></svg></div></div>
+          <div class="profile-av-wrap">
+            <div class="profile-av">TM</div>
+            <div class="profile-edit-dot"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+          </div>
+          <div class="profile-name">Tariro Moyo</div>
+          <div class="profile-school">University of Zimbabwe · Year 2</div>
+          <div class="profile-badges">
+            <div class="p-badge blue">Student</div>
+            <div class="p-badge mint">Active User</div>
+          </div>
+        </div>
+        <div class="profile-body">
+          <div class="profile-stats">
+            <div class="pstat"><div class="pstat-val">12</div><div class="pstat-lbl">Sessions</div></div>
+            <div class="pstat"><div class="pstat-val">8</div><div class="pstat-lbl">Check-ins</div></div>
+            <div class="pstat"><div class="pstat-val">4</div><div class="pstat-lbl">Resources</div></div>
+          </div>
+          <div class="settings-group">
+            <div class="setting-row">
+              <div class="set-icon" style="background:var(--blue-pale)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+              <div class="set-lbl">Edit Profile</div>
+              <div class="set-chev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </div>
+            <div class="setting-row">
+              <div class="set-icon" style="background:var(--mint-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+              <div class="set-lbl">Notifications</div>
+              <div class="set-toggle"></div>
+            </div>
+            <div class="setting-row">
+              <div class="set-icon" style="background:var(--violet-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+              <div class="set-lbl">Privacy &amp; Data</div>
+              <div class="set-chev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </div>
+            <div class="setting-row">
+              <div class="set-icon" style="background:var(--amber-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg></div>
+              <div class="set-lbl">Anonymous Mode</div>
+              <div class="set-toggle off"></div>
+            </div>
+          </div>
+          <div class="settings-group">
+            <div class="setting-row">
+              <div class="set-icon" style="background:var(--teal-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0EA5C9" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+              <div class="set-lbl">Help &amp; Support</div>
+              <div class="set-chev"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+            </div>
+            <div class="logout-row">
+              <div class="set-icon" style="background:var(--rose-light)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2.2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
+              <div class="logout-lbl">Sign Out</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="screen-badge"><div class="badge-dot"></div>10 · Profile &amp; Settings</div>
+</div>
+
+</div><!-- /screens-grid -->
+</body>
+</html>
