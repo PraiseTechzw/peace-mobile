@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   },
   scroll: {
     flexGrow: 1,
-    paddingBottom: theme.spacing.x4,
+    paddingBottom: 100,
   },
   content: {
     flexGrow: 1,
