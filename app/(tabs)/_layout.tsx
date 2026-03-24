@@ -4,22 +4,16 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { theme } from '@/theme';
+import { TabBar } from '@/components/navigation/tab-bar';
 
 export default function TabLayout() {
   return (
     <Tabs
+      tabBar={props => <TabBar {...props} />}
       screenOptions={{
         tabBarActiveTintColor: theme.colors.primary,
         tabBarInactiveTintColor: theme.colors.textMuted,
         headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarStyle: {
-          height: theme.sizing.tabBarHeight,
-          paddingTop: 8,
-          paddingBottom: 8,
-          borderTopColor: theme.colors.border,
-          backgroundColor: theme.colors.surface,
-        },
       }}>
       <Tabs.Screen
         name="index"
