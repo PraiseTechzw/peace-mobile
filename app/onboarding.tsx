@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { IconBadge } from '@/components/ui/icon-badge';
 import { Screen } from '@/components/ui/screen';
 import { theme } from '@/theme';
+import { updateProfile } from '@/lib/api/peace-api';
 
 const topics = [
   { id: 't1', label: 'Exam stress', icon: 'auto-stories' as const },
@@ -39,11 +40,23 @@ export default function OnboardingScreen() {
     setSelectedGoals((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 1) {
       setStep(2);
     } else {
-      router.replace('/(tabs)');
+      try {
+        await updateProfile({
+          preferences: {
+            onboarded: true,
+            topics: selectedTopics,
+            goals: selectedGoals,
+          }
+        } as any);
+        router.replace('/(tabs)');
+      } catch (error) {
+        console.error('Failed to save onboarding:', error);
+        router.replace('/(tabs)');
+      }
     }
   };
 

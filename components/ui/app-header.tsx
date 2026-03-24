@@ -1,4 +1,5 @@
 import { StyleSheet, View, Pressable } from 'react-native';
+import type { ReactNode } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
@@ -10,9 +11,10 @@ type AppHeaderProps = {
   title: string;
   subtitle?: string;
   showBack?: boolean;
+  trailing?: ReactNode;
 };
 
-export function AppHeader({ eyebrow, title, subtitle, showBack }: AppHeaderProps) {
+export function AppHeader({ eyebrow, title, subtitle, showBack, trailing }: AppHeaderProps) {
   return (
     <View style={styles.container}>
       {showBack && (
@@ -25,6 +27,7 @@ export function AppHeader({ eyebrow, title, subtitle, showBack }: AppHeaderProps
         <AppText variant="h1">{title}</AppText>
         {subtitle ? <AppText variant="body" color={theme.colors.textSecondary}>{subtitle}</AppText> : null}
       </View>
+      {trailing && <View style={styles.trailing}>{trailing}</View>}
     </View>
   );
 }
@@ -43,5 +46,10 @@ const styles = StyleSheet.create({
   wrap: {
     flex: 1,
     gap: theme.spacing.xs,
+  },
+  trailing: {
+    justifyContent: 'center',
+    alignSelf: 'stretch',
+    paddingTop: theme.spacing.sm,
   },
 });

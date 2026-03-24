@@ -6,6 +6,7 @@ import { theme } from '@/theme';
 type IconBadgeProps = {
   icon: keyof typeof MaterialIcons.glyphMap;
   tone?: 'blue' | 'teal' | 'mint' | 'amber' | 'rose' | 'violet';
+  size?: number;
 };
 
 const toneMap = {
@@ -17,10 +18,10 @@ const toneMap = {
   violet: { bg: '#EDE9FE', fg: '#7C3AED' },
 } as const;
 
-export function IconBadge({ icon, tone = 'blue' }: IconBadgeProps) {
+export function IconBadge({ icon, tone = 'blue', size = 34 }: IconBadgeProps) {
   return (
-    <View style={[styles.wrap, { backgroundColor: toneMap[tone].bg }]}>
-      <MaterialIcons name={icon} size={theme.sizing.iconSm} color={toneMap[tone].fg} />
+    <View style={[styles.wrap, { backgroundColor: toneMap[tone].bg, width: size, height: size, borderRadius: size / 3 }]}>
+      <MaterialIcons name={icon} size={size * 0.6} color={toneMap[tone].fg} />
     </View>
   );
 }

@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 
 import { theme } from '@/theme';
 import { AppText } from './app-text';
@@ -9,6 +9,7 @@ type ButtonProps = PropsWithChildren<{
   variant?: 'primary' | 'secondary' | 'danger';
   disabled?: boolean;
   accessibilityLabel?: string;
+  style?: ViewStyle;
 }>;
 
 export function Button({
@@ -17,6 +18,7 @@ export function Button({
   variant = 'primary',
   disabled = false,
   accessibilityLabel,
+  style,
 }: ButtonProps) {
   return (
     <Pressable
@@ -29,6 +31,7 @@ export function Button({
         variantStyles[variant],
         disabled && styles.disabled,
         pressed && styles.pressed,
+        style,
       ]}>
       <View>
         <AppText variant="bodyStrong" color={textColors[variant]}>
