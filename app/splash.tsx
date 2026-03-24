@@ -1,29 +1,74 @@
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import Animated, { FadeInRight, FadeOutLeft, SlideInRight, SlideOutLeft, interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 import { AppText } from '@/components/ui/app-text';
 import { Button } from '@/components/ui/button';
 import { Screen } from '@/components/ui/screen';
 import { theme } from '@/theme';
 
+const splashSteps = [
+  {
+    title: 'PEACE',
+    tagline: 'A calm and safe place for student wellness and peer support.',
+  },
+  {
+    title: 'CONNECT',
+    tagline: 'Chat anonymously with trained peer educators who understand what you are going through.',
+  },
+  {
+    title: 'TRACK',
+    tagline: 'Monitor your mood, build healthy habits, and easily access emergency resources.',
+  }
+];
+
 export default function SplashScreen() {
+  const [step, setStep] = useState(0);
+
+  const handleNext = () => {
+    if (step < 2) {
+      setStep(step + 1);
+    } else {
+      router.replace('/onboarding');
+    }
+  };
+
   return (
     <Screen scrollable={false}>
       <View style={styles.hero}>
-        <View style={styles.orbOne} />
-        <View style={styles.orbTwo} />
-        <View style={styles.logo}>
-          <AppText variant="h2" color="#FFFFFF">PEACE</AppText>
-        </View>
-        <AppText variant="body" color="#C8DBF8" style={styles.tagline}>
-          A calm and safe place for student wellness and peer support.
-        </AppText>
+        <Animated.View style={styles.orbOne} />
+        <Animated.View style={styles.orbTwo} />
+        
+        <Animated.View 
+          key={step}
+          entering={FadeInRight.duration(400)} 
+          exiting={FadeOutLeft.duration(400)} 
+          style={styles.contentContainer}
+        >
+          <View style={styles.logo}>
+            <AppText variant="h2" color="#FFFFFF">{splashSteps[step].title}</AppText>
+          </View>
+          <AppText variant="body" color="#C8DBF8" style={styles.tagline}>
+            {splashSteps[step].tagline}
+          </AppText>
+        </Animated.View>
+
         <View style={styles.indicators}>
-          <View style={[styles.dot, styles.dotActive]} />
-          <View style={styles.dot} />
-          <View style={styles.dot} />
+          {splashSteps.map((_, index) => (
+            <Animated.View 
+              key={index}
+              style={[
+                styles.dot, 
+                step === index ? styles.dotActive : null,
+              ]} 
+            />
+          ))}
         </View>
-        <Button onPress={() => router.replace('/onboarding')}>Get Started</Button>
+
+        <Button onPress={handleNext}>
+          {step === 2 ? 'Get Started' : 'Next'}
+        </Button>
       </View>
     </Screen>
   );
@@ -59,16 +104,26 @@ const styles = StyleSheet.create({
     bottom: 20,
     left: -20,
   },
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    gap: theme.spacing.lg,
+  },
   logo: {
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.3)',
     borderRadius: theme.radius.pill,
     paddingHorizontal: theme.spacing.xl,
     paddingVertical: theme.spacing.md,
+    backgroundColor: 'rgba(255,255,255,0.05)',
   },
   tagline: {
     textAlign: 'center',
     maxWidth: 280,
+    fontSize: 18,
+    lineHeight: 26,
   },
   indicators: {
     flexDirection: 'row',

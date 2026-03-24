@@ -1,30 +1,42 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Pressable } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import Animated, { FadeInRight, FadeOutLeft, SlideInRight, SlideOutLeft, Layout } from 'react-native-reanimated';
 
 import { AppHeader } from '@/components/ui/app-header';
 import { AppText } from '@/components/ui/app-text';
 import { Button } from '@/components/ui/button';
-import { Chip } from '@/components/ui/chip';
 import { IconBadge } from '@/components/ui/icon-badge';
 import { Screen } from '@/components/ui/screen';
 import { theme } from '@/theme';
 
-const topics = ['Exam stress', 'Anxiety', 'Relationships', 'Sleep', 'Confidence', 'Crisis planning'];
-const goals = ['Daily check-ins', 'Talk to a peer', 'Track my mood', 'Get better sleep'];
+const topics = [
+  { id: 't1', label: 'Exam stress', icon: 'auto-stories' as const },
+  { id: 't2', label: 'Anxiety', icon: 'waves' as const },
+  { id: 't3', label: 'Relationships', icon: 'favorite-border' as const },
+  { id: 't4', label: 'Sleep', icon: 'bedtime' as const },
+  { id: 't5', label: 'Confidence', icon: 'emoji-events' as const },
+  { id: 't6', label: 'Crisis planning', icon: 'health-and-safety' as const },
+];
+const goals = [
+  { id: 'g1', label: 'Daily check-ins', icon: 'fact-check' as const },
+  { id: 'g2', label: 'Talk to a peer', icon: 'forum' as const },
+  { id: 'g3', label: 'Track my mood', icon: 'mood' as const },
+  { id: 'g4', label: 'Get better sleep', icon: 'bedtime' as const },
+];
 
 export default function OnboardingScreen() {
   const [step, setStep] = useState(1);
-  const [selectedTopics, setSelectedTopics] = useState<string[]>(['Exam stress']);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>(['t1']);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
-  const toggleTopic = (topic: string) => {
-    setSelectedTopics((prev) => (prev.includes(topic) ? prev.filter((x) => x !== topic) : [...prev, topic]));
+  const toggleTopic = (id: string) => {
+    setSelectedTopics((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
-  const toggleGoal = (goal: string) => {
-    setSelectedGoals((prev) => (prev.includes(goal) ? prev.filter((x) => x !== goal) : [...prev, goal]));
+  const toggleGoal = (id: string) => {
+    setSelectedGoals((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
   const handleNext = () => {
@@ -52,10 +64,21 @@ export default function OnboardingScreen() {
             subtitle="Pick topics you want support with. You can stay anonymous in peer chat."
           />
 
-          <View style={styles.chips}>
-            {topics.map((topic) => (
-              <Chip key={topic} label={topic} selected={selectedTopics.includes(topic)} onPress={() => toggleTopic(topic)} />
-            ))}
+          <View style={styles.grid}>
+            {topics.map((t) => {
+              const active = selectedTopics.includes(t.id);
+              return (
+                <Pressable
+                  key={t.id}
+                  onPress={() => toggleTopic(t.id)}
+                  style={[styles.tile, active && styles.tileActive]}>
+                  <MaterialIcons name={t.icon} size={28} color={active ? theme.colors.primary : theme.colors.textMuted} />
+                  <AppText variant="bodyStrong" color={active ? theme.colors.primaryDark : theme.colors.textSecondary} style={{ textAlign: 'center' }}>
+                    {t.label}
+                  </AppText>
+                </Pressable>
+              );
+            })}
           </View>
 
           <View style={styles.notice}>
@@ -78,10 +101,29 @@ export default function OnboardingScreen() {
             subtitle="Select a few goals to personalize your daily prompts."
           />
 
-          <View style={styles.chips}>
-            {goals.map((goal) => (
-              <Chip key={goal} label={goal} selected={selectedGoals.includes(goal)} onPress={() => toggleGoal(goal)} />
-            ))}
+          <View style={styles.gridList}>
+            {goals.map((g) => {
+              const active = selectedGoals.includes(g.id);
+              return (
+                <Pressable
+                  key={g.id}
+                  onPress={() => toggleGoal(g.id)}
+                  style={[styles.listTile, active && styles.tileActive]}>
+                  <View style={[styles.iconWrap, active && styles.iconWrapActive]}>
+                    <MaterialIcons name={g.icon} size={24} color={active ? theme.colors.primaryDark : theme.colors.textMuted} />
+                  </View>
+                  <AppText variant="bodyStrong" color={active ? theme.colors.primaryDark : theme.colors.textSecondary}>
+                    {g.label}
+                  </AppText>
+                  <MaterialIcons 
+                    name={active ? 'check-circle' : 'radio-button-unchecked'} 
+                    size={24} 
+                    color={active ? theme.colors.primary : theme.colors.border} 
+                    style={{ marginLeft: 'auto' }}
+                  />
+                </Pressable>
+              );
+            })}
           </View>
 
           <View style={[styles.notice, { backgroundColor: '#F0FDF4', borderColor: '#BBF7D0' }]}>
@@ -119,13 +161,57 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
   },
   stepContainer: {
-    gap: theme.spacing.md,
+    gap: theme.spacing.lg,
     flex: 1,
   },
-  chips: {
+  grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    gap: theme.spacing.md,
+  },
+  tile: {
+    width: '47%',
+    backgroundColor: '#F8FAFF',
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+    borderRadius: theme.radius.lg,
+    padding: theme.spacing.lg,
+    alignItems: 'center',
     gap: theme.spacing.sm,
+    ...theme.shadows.sm,
+  },
+  tileActive: {
+    backgroundColor: '#EFF6FF',
+    borderColor: theme.colors.primary,
+    shadowColor: theme.colors.primary,
+  },
+  gridList: {
+    gap: theme.spacing.md,
+  },
+  listTile: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8FAFF',
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+    borderRadius: theme.radius.lg,
+    padding: theme.spacing.md,
+    gap: theme.spacing.md,
+    ...theme.shadows.sm,
+  },
+  iconWrap: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  iconWrapActive: {
+    backgroundColor: '#DBEAFE',
+    borderColor: '#BFDBFE',
   },
   notice: {
     backgroundColor: theme.colors.primarySoft,
