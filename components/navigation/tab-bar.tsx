@@ -1,17 +1,34 @@
-import { View, StyleSheet, Pressable, Dimensions } from 'react-native';
+import { View, StyleSheet, Pressable, Dimensions, Keyboard } from 'react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import { MaterialIcons } from '@expo/vector-icons';
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, withSpring, FadeOut, FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import { useEffect, useState } from 'react';
 import { theme } from '@/theme';
 
 export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const show = Keyboard.addListener('keyboardDidShow', () => setVisible(false));
+    const hide = Keyboard.addListener('keyboardDidHide', () => setVisible(true));
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
+
+  if (!visible) return null;
   
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom + 8 }]}>
+    <Animated.View 
+      entering={FadeIn.duration(200)} 
+      exiting={FadeOut.duration(200)}
+      style={[styles.container, { paddingBottom: insets.bottom + 8 }]}
+    >
       <BlurView intensity={80} tint="light" style={styles.tabContainer}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -46,7 +63,7 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
           );
         })}
       </BlurView>
-    </View>
+    </Animated.View>
   );
 }
 

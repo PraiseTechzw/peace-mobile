@@ -1,214 +1,192 @@
-import { useEffect, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, View, KeyboardAvoidingView, Platform } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import Animated, { FadeInUp, Layout, SlideInRight, SlideInLeft, useAnimatedStyle, withSpring, withRepeat, withTiming, withSequence, withDelay, useSharedValue, interpolate } from 'react-native-reanimated';
+import { BlurView } from 'expo-blur';
+import * as Haptics from 'expo-haptics';
 
 import { AppHeader } from '@/components/ui/app-header';
 import { AppText } from '@/components/ui/app-text';
 import { Card } from '@/components/ui/card';
-import { IconBadge } from '@/components/ui/icon-badge';
 import { Screen } from '@/components/ui/screen';
 import { TextField } from '@/components/ui/text-field';
 import { escalateChat, getChatMessages, sendChatMessage } from '@/lib/api/peace-api';
 import { theme } from '@/theme';
 import type { ChatMessage } from '@/types/app';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ChatScreen() {
   const [message, setMessage] = useState('');
   const [escalated, setEscalated] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const scrollRef = useRef<ScrollView>(null);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     getChatMessages().then(setMessages).catch(() => setMessages([]));
   }, []);
 
+  useEffect(() => {
+     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
+  }, [messages, isTyping]);
+
   const sendMessage = async () => {
     const trimmed = message.trim();
-
-    if (!trimmed) {
-      return;
-    }
+    if (!trimmed) return;
 
     try {
+      setMessage('');
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       const sent = await sendChatMessage({ text: trimmed });
       setMessages((prev) => [...prev, sent]);
-      setMessage('');
     } catch {
-      // Add local message on failure just for smooth UI in current context,
-      // though ideally would show an error.
-      const userMessage = {
-        id: `u-${Date.now()}`,
-        fromSelf: true,
-        text: trimmed,
-        time: getNowTime(),
-      };
-      setMessages((prev) => [...prev, userMessage]);
+      const userMsg = { id: `u-${Date.now()}-${Math.random()}`, fromSelf: true, text: trimmed, time: getNowTime() };
+      setMessages(p => [...p, userMsg]);
       setMessage('');
-
-      if (escalated) {
-        setMessages((prev) => [...prev, {
-          id: `h-${Date.now() + 1}`,
-          fromSelf: false,
-          text: 'A peer support educator has been notified. Please hold on, someone will join shortly.',
-          time: getNowTime(),
-        }]);
-        return;
-      }
-
-      setMessages((prev) => [...prev, {
-        id: `a-${Date.now() + 2}`,
-        fromSelf: false,
-        text: getAiReply(trimmed),
-        time: getNowTime(),
-      }]);
+      
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        const reply = escalated 
+          ? 'Human educator notified. Hold on...' 
+          : getAiReply(trimmed);
+        setMessages(p => [...p, { id: `a-${Date.now()}-${Math.random()}`, fromSelf: false, text: reply, time: getNowTime() }]);
+        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      }, 1500);
     }
   };
 
   const toggleEscalation = async () => {
     try {
-      if (!escalated) {
-        await escalateChat();
-      }
+      if (!escalated) await escalateChat();
       setEscalated(!escalated);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     } catch {
       setEscalated(!escalated);
     }
   };
 
   return (
-    <Screen scrollable={false} keyboardAware>
-      <View style={styles.wrap}>
+    <Screen withMesh scrollable={false} padded={false}>
+      <View style={styles.header}>
         <AppHeader
-          title={escalated ? 'Support Chat (Escalated)' : 'AI Peer Chat'}
-          subtitle={
-            escalated
-              ? 'You requested human support. We are connecting you now.'
-              : 'AI peer helper is available now. Ask to escalate for human support.'
+          title={escalated ? 'Peer Support' : 'Peace Helper'}
+          subtitle={escalated ? 'Connecting you to a human peer...' : 'AI assistant • Online now'}
+          trailing={
+            <Pressable 
+              onPress={toggleEscalation} 
+              style={[styles.escalateBtn, escalated ? styles.escalateActive : null] as any}
+            >
+              <MaterialIcons name={escalated ? 'person' : 'person-add'} size={20} color={escalated ? '#FFF' : theme.colors.primary} />
+            </Pressable>
           }
         />
-        <Card style={styles.peerHeader}>
-          <View style={styles.peerRow}>
-            <IconBadge icon="person" tone="violet" />
-            <View style={styles.peerMeta}>
-              <AppText variant="bodyStrong">{escalated ? 'Support Queue' : 'PEACE AI Peer Helper'}</AppText>
-              <AppText variant="caption" color={theme.colors.success}>
-                {escalated ? 'Human support requested' : 'AI assistant online'}
-              </AppText>
-            </View>
-          </View>
-          <Pressable
-            style={[styles.smallAction, escalated && styles.smallActionActive]}
-            onPress={toggleEscalation}>
-            <AppText variant="caption" color={escalated ? '#FFFFFF' : theme.colors.primaryDark}>
-              {escalated ? 'Cancel escalation' : 'Escalate to human support'}
-            </AppText>
-          </Pressable>
-        </Card>
-        <Card style={styles.nudge}>
-          <AppText variant="caption" color={escalated ? theme.colors.warning : theme.colors.danger}>
-            {escalated
-              ? 'You are in the support queue. For urgent danger, use Crisis Help immediately.'
-              : 'AI support is active. Ask for escalation any time, or use Crisis Help if urgent.'}
-          </AppText>
-        </Card>
-
-        <ScrollView style={styles.thread} contentContainerStyle={styles.messages}>
-          {messages.map((item) => (
-            <View key={item.id} style={[styles.bubble, item.fromSelf ? styles.self : styles.other]}>
-              <AppText variant="body" color={item.fromSelf ? '#FFFFFF' : theme.colors.textPrimary}>{item.text}</AppText>
-              <AppText variant="caption" color={item.fromSelf ? '#E0ECFF' : theme.colors.textMuted}>{item.time}</AppText>
-            </View>
-          ))}
-        </ScrollView>
-
-        <View style={styles.inputRow}>
-          <View style={styles.grow}>
-            <TextField placeholder="Type your message" value={message} onChangeText={setMessage} />
-          </View>
-          <Pressable style={styles.send} onPress={sendMessage}>
-            <AppText variant="caption" color="#FFFFFF">Send</AppText>
-          </Pressable>
-        </View>
       </View>
+
+      <ScrollView 
+        ref={scrollRef}
+        style={styles.thread} 
+        contentContainerStyle={styles.messages}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.noticeWrap}>
+           <Card style={[styles.nudge, escalated && styles.nudgeEscalated]}>
+             <AppText variant="caption" color={escalated ? theme.colors.primaryDark : theme.colors.textSecondary}>
+                {escalated 
+                  ? 'Human support requested. For immediate danger, use Crisis Help.' 
+                  : 'AI support is active. Tap the icon above to talk to a human peer.'}
+             </AppText>
+           </Card>
+        </View>
+
+        {messages.map((item, idx) => {
+          const isLastInGroup = idx === messages.length - 1 || messages[idx + 1].fromSelf !== item.fromSelf;
+          return (
+            <Animated.View 
+              key={`${item.id}-${idx}`} 
+              layout={Layout.springify()} 
+              entering={item.fromSelf ? SlideInRight : SlideInLeft}
+              style={[styles.bubbleWrap, item.fromSelf ? styles.self : styles.other]}
+            >
+              <View style={[
+                styles.bubble, 
+                item.fromSelf ? styles.bubbleSelf : styles.bubbleOther,
+                !isLastInGroup && (item.fromSelf ? { borderBottomRightRadius: 20 } : { borderBottomLeftRadius: 20 })
+              ]}>
+                <AppText 
+                  variant="body" 
+                  color={item.fromSelf ? '#FFFFFF' : theme.colors.textPrimary}
+                  style={styles.messageText}
+                >
+                  {item.text}
+                </AppText>
+                <AppText 
+                  variant="caption" 
+                  style={styles.bubbleTime} 
+                  color={item.fromSelf ? 'rgba(255,255,255,0.7)' : theme.colors.textMuted}
+                >
+                  {item.time}
+                </AppText>
+              </View>
+            </Animated.View>
+          );
+        })}
+
+        {isTyping && (
+          <Animated.View 
+            entering={FadeInUp}
+            style={[styles.bubbleWrap, styles.other, styles.typingPlaceholder]}
+          >
+            <View style={[styles.bubble, styles.bubbleOther, { paddingVertical: 14 }]}>
+              <View style={styles.typingDots}>
+                <TypingDot delay={0} />
+                <TypingDot delay={200} />
+                <TypingDot delay={400} />
+              </View>
+            </View>
+          </Animated.View>
+        )}
+      </ScrollView>
+
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={100}>
+        <BlurView intensity={90} tint="light" style={[styles.inputContainer, { paddingBottom: (insets.bottom || 20) + 80 }]}>
+          <TextField 
+            placeholder="Type a message..." 
+            value={message} 
+            onChangeText={setMessage} 
+            style={styles.inputField}
+            multiline
+          />
+          <Pressable style={styles.sendBtn} onPress={sendMessage}>
+            <MaterialIcons name="send" size={24} color="#FFF" />
+          </Pressable>
+        </BlurView>
+      </KeyboardAvoidingView>
     </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  wrap: {
-    flex: 1,
-    gap: theme.spacing.md,
-  },
-  nudge: {
-    backgroundColor: '#FFE4E6',
-    borderColor: '#FECACA',
-  },
-  peerHeader: {
-    backgroundColor: '#F7FAFF',
-  },
-  peerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.sm,
-  },
-  peerMeta: {
-    flex: 1,
-  },
-  smallAction: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#EFF6FF',
-    borderRadius: theme.radius.pill,
-    paddingHorizontal: theme.spacing.md,
-    minHeight: 32,
-    justifyContent: 'center',
-  },
-  smallActionActive: {
-    backgroundColor: theme.colors.primaryDark,
-  },
-  thread: {
-    flex: 1,
-    backgroundColor: '#F8FBFF',
-    borderRadius: theme.radius.lg,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    paddingHorizontal: theme.spacing.sm,
-  },
-  messages: {
-    gap: theme.spacing.md,
-    paddingBottom: theme.spacing.md,
-    paddingTop: theme.spacing.md,
-  },
-  bubble: {
-    maxWidth: '86%',
-    borderRadius: theme.radius.lg,
-    padding: theme.spacing.md,
-    gap: theme.spacing.xs,
-  },
-  self: {
-    alignSelf: 'flex-end',
-    backgroundColor: theme.colors.primary,
-  },
-  other: {
-    alignSelf: 'flex-start',
-    backgroundColor: theme.colors.surface,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-  },
-  inputRow: {
-    flexDirection: 'row',
-    gap: theme.spacing.sm,
-    alignItems: 'center',
-  },
-  grow: {
-    flex: 1,
-  },
-  send: {
-    borderRadius: theme.radius.pill,
-    backgroundColor: theme.colors.primary,
-    minHeight: theme.sizing.controlHeight,
-    paddingHorizontal: theme.spacing.lg,
-    justifyContent: 'center',
-    ...theme.shadows.button,
-  },
-});
+function TypingDot({ delay }: { delay: number }) {
+  const scale = useSharedValue(0.5);
+  useEffect(() => {
+    scale.value = withRepeat(
+      withSequence(
+        withDelay(delay, withTiming(1, { duration: 400 })),
+        withTiming(0.5, { duration: 400 })
+      ),
+      -1,
+      true
+    );
+  }, []);
+
+  const style = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: interpolate(scale.value, [0.5, 1], [0.4, 1]),
+  }));
+
+  return <Animated.View style={[styles.dot, style]} />;
+}
 
 function getNowTime() {
   const now = new Date();
@@ -232,3 +210,114 @@ function getAiReply(userText: string) {
 
   return 'I hear you. I can help with a quick coping step, a study/wellness plan, or we can escalate to human peer support whenever you want.';
 }
+
+const styles = StyleSheet.create({
+  header: {
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.lg,
+  },
+  escalateBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: theme.colors.primarySoft,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.primary,
+  },
+  escalateActive: {
+    backgroundColor: theme.colors.primary,
+  },
+  noticeWrap: {
+    paddingHorizontal: theme.spacing.lg,
+  },
+  nudge: {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderColor: theme.colors.border,
+    paddingVertical: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+  },
+  nudgeEscalated: {
+    backgroundColor: '#EFF6FF',
+    borderColor: '#BFDBFE',
+  },
+  thread: {
+    flex: 1,
+  },
+  messages: {
+    gap: theme.spacing.sm,
+    paddingBottom: theme.spacing.xl,
+    paddingHorizontal: theme.spacing.md,
+  },
+  bubbleWrap: {
+    maxWidth: '85%',
+  },
+  bubble: {
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    ...theme.shadows.sm,
+  },
+  bubbleSelf: {
+    backgroundColor: theme.colors.primary,
+    borderBottomRightRadius: 4,
+  },
+  bubbleOther: {
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderBottomLeftRadius: 4,
+  },
+  self: {
+    alignSelf: 'flex-end',
+  },
+  other: {
+    alignSelf: 'flex-start',
+  },
+  bubbleTime: {
+    fontSize: 10,
+    marginTop: 2,
+    alignSelf: 'flex-end',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.md,
+    gap: theme.spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.5)',
+  },
+  inputField: {
+    flex: 1,
+    backgroundColor: '#FFF',
+    maxHeight: 120,
+  },
+  sendBtn: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: theme.colors.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...theme.shadows.button,
+  },
+  typingPlaceholder: {
+    marginBottom: theme.spacing.md,
+  },
+  typingDots: {
+    flexDirection: 'row',
+    gap: 4,
+    width: 40,
+    justifyContent: 'center',
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: theme.colors.primary,
+  },
+  messageText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
+});
